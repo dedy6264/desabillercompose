@@ -31,7 +31,7 @@ class MainController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         if(session()->has('LoggedUser')){
             session()->pull('LoggedUser');

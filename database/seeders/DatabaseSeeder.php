@@ -164,6 +164,16 @@ class DatabaseSeeder extends Seeder
             'payment_status'=>'PAYMENT',
             'payment_date'=>now(),
             'payment_method_id'=>1,
+            'payment_reff'=>'',
+            'total_price'=>4000,
+            'created_by'=>'admin',
+            'updated_by'=>'admin',
+        ],[
+            'trx_no'=>'KSR'.now().'002',
+            'payment_status'=>'PAYMENT',
+            'payment_date'=>now(),
+            'payment_method_id'=>1,
+            'payment_reff'=>'',
             'total_price'=>4000,
             'created_by'=>'admin',
             'updated_by'=>'admin',
@@ -175,6 +185,18 @@ class DatabaseSeeder extends Seeder
             'product_id'=>1,
             'qty'=>2,
             'product_price'=>2000,
+        ],[
+            'trx_no_reff'=>'KSR'.now().'002',
+            'transaction_id'=>2,
+            'product_id'=>2,
+            'qty'=>2,
+            'product_price'=>2000,
+        ],[
+            'trx_no_reff'=>'KSR'.now().'002',
+            'transaction_id'=>2,
+            'product_id'=>1,
+            'qty'=>3,
+            'product_price'=>6000,
         ]]);
 
 

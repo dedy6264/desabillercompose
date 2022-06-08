@@ -1,7 +1,6 @@
 @extends('dashboard.app')
 
 @section('customLink')
-{{-- <link href="{{url('admin/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet"> --}}
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
 <style>
@@ -72,9 +71,9 @@
 
 @section('pageheading')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Product</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    <h1 class="h3 mb-0 text-gray-800">Sales</h1>
+    {{-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> --}}
 </div>
 @endsection
 
@@ -86,81 +85,96 @@
         },
         columns:[
             { data: 'DT_RowIndex', orderable: false, searchable: false },
-            {data:'action', name:'action', orderable:false, searchable:false},
             {data:'product_name', name:'product_name'},
             {data:'product_code', name:'product_code'},
-            {data:'product_desc', name:'product_desc'},
             {data:'product_price', name:'product_price'},
-            {data:'created_by', name:'created_by'},
+            {data:'action', name:'action', orderable:false, searchable:false},
         ],
     } );
 </script>
 @endsection
 
 @section('content')
+<div class="row">
     <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            {{-- <h6 class="m-0 font-weight-bold text-primary ">DataTables Example</h6> --}}
-            <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-plus fa-sm text-white-50"></i> Add Product</a>
-        </div>
-        @if (Session::get('fail'))
-        {{Session::get('fail')}}
-    @endif
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Action</th>
-                            <th>Product Name</th>
-                            <th>Product Code</th>
-                            <th>Product Desc</th>
-                            <th>Price</th>
-                            <th>Created By</th>
-                        </tr>
-                    </thead>
-                    {{-- <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th>
-                        </tr>
-                    </tfoot> --}}
-                    <tbody>
-                        {{-- <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr>
-                            <td>Garrett Winters</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>63</td>
-                            <td>2011/07/25</td>
-                            <td>$170,750</td>
-                        </tr> --}}
-                    </tbody>
-                </table>
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                {{-- <h6 class="m-0 font-weight-bold text-primary ">DataTables Example</h6> --}}
+                <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-plus fa-sm text-white-50"></i> Add Product</a>
+            </div>
+            @if (Session::get('fail'))
+            {{Session::get('fail')}}
+            @endif
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Product Name</th>
+                                <th>Product Code</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-@endsection
-
-@section('customScript')
-    <!-- Page level plugins -->
-    {{-- <script src="{{url('admin/vendor/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{url('admin/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="{{url('admin/js/demo/datatables-demo.js')}}"></script> --}}
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary ">Cart</h6>
+                {{-- <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-plus fa-sm text-white-50"></i> Add Product</a> --}}
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataCart" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Product Name</th>
+                                <th>Product Code</th>
+                                <th>qty</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th colspan="4">Total</th>
+                            <th>25000</th>
+                        </tr>
+                    </tfoot>
+                        <tbody>
+                            <tr>
+                            <td>1</td>
+                            <td>Pensil</td>
+                            <td>PN001</td>
+                            <td>61</td>
+                            <td>2500</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Buku</td>
+                            <td>BkK001</td>
+                            <td>63</td>
+                            <td>2500</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-plus fa-sm text-white-50"></i> Bayar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

@@ -61,7 +61,8 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Components:</h6>
                 <a class="collapse-item" href="{{route('product.index')}}">Produk</a>
-                <a class="collapse-item" href="{{route('transaction.index')}}">Penjualan</a>
+                <a class="collapse-item" href="{{route('transaction.index')}}">Transaksi</a>
+                <a class="collapse-item" href="{{route('sales.index')}}">Penjualan</a>
             </div>
         </div>
     </li>
@@ -153,12 +154,7 @@
         </div>
     </li>
 
-    <!-- Nav Item - Charts -->
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span></a>
-    </li>
+    
 
     <!-- Nav Item - Tables -->
     <li class="nav-item">
@@ -166,7 +162,12 @@
             <i class="fas fa-fw fa-table"></i>
             <span>Tables</span></a>
     </li>--}}
-
+    <!-- Nav Item - Logout -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('logout')}}">
+            <i class="fas fa-fw fa-sign-out-alt"></i>
+            <span>Logout</span></a>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

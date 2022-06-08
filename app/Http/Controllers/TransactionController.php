@@ -7,14 +7,19 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return view('dashboard.transaksi.index');
+        $mainData=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
+                    ->select('transactions.*','payments.payment_method_name')
+                    ->get();
+        if(request()->ajax()){
+            // $query=Transaction::query();
+                // return Datatables::of($query)
+                return datatables()->of($mainData)
+                ->addIndexColumn()
+                ->make();
+            }
+        return view('dashboard.transaction.index');
     }
 
     /**
@@ -22,10 +27,27 @@ class TransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function show(Transaction $transaction)
+    {
+        // dd($transaction->id);
+        $header=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
+            ->where('transactions.id',$transaction->id)
+            ->select('transactions.*','payments.payment_method_name')
+            ->get();
+        $detail=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
+            ->join('trx_details','transactions.id','=','trx_details.transaction_id')
+            ->join('products','products.id','=','trx_details.product_id')
+            ->where('transactions.id',$transaction->id)
+            ->select('transactions.*','payments.payment_method_name','trx_details.qty','trx_details.product_price','products.product_name')
+            ->get();
+            // dd($header,$detail);
+        return view('dashboard.transaction.details',compact('detail','header'));
+    }
     public function create()
     {
-        //
+        
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -44,10 +66,10 @@ class TransactionController extends Controller
      * @param  \App\Models\Transaction  $transaction
      * @return \Illuminate\Http\Response
      */
-    public function show(Transaction $transaction)
-    {
-        //
-    }
+    // public function show(Transaction $transaction)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.

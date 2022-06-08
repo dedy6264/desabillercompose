@@ -46,10 +46,11 @@ class CreateUsersTable extends Migration
 
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('trx_no');
-            $table->string('payment_status');
+            $table->string('trx_no',225);
+            $table->string('payment_status',10);
             $table->timestamp('payment_date');
             $table->unsignedInteger('payment_method_id');
+            $table->string('payment_reff',225)->default(null);
             $table->unsignedInteger('total_price');
             $table->string('created_by');
             $table->string('updated_by');
@@ -68,6 +69,14 @@ class CreateUsersTable extends Migration
             $table->foreign('transaction_id')->references('id')->on('transactions');
             $table->foreign('product_id')->references('id')->on('products');
         });
+        Schema::create('carts', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('qty');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('product_id')->references('id')->on('products');
+        });
     }
 
     /**
@@ -77,6 +86,7 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('carts');
         Schema::dropIfExists('trx_details');
         Schema::dropIfExists('transactions');
         Schema::dropIfExists('products');

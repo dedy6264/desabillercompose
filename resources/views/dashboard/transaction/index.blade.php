@@ -72,7 +72,7 @@
 
 @section('pageheading')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Product</h1>
+    <h1 class="h3 mb-0 text-gray-800">Transaction</h1>
     <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
             class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 </div>
@@ -85,13 +85,17 @@
             url:'{!!url()->current()!!}',
         },
         columns:[
-            { data: 'DT_RowIndex', orderable: false, searchable: false },
-            {data:'action', name:'action', orderable:false, searchable:false},
-            {data:'product_name', name:'product_name'},
-            {data:'product_code', name:'product_code'},
-            {data:'product_desc', name:'product_desc'},
-            {data:'product_price', name:'product_price'},
-            {data:'created_by', name:'created_by'},
+            {data: 'DT_RowIndex', orderable: false, searchable: false },
+            {data:'id', name:'id', render: function ( data, type, row, meta ) {
+                return '<a href="transaction/'+data+'"><i class="fas fa-eye"></i></a>';
+            }},
+            {data:'trx_no', name:'trx_no'},
+            {data:'payment_status', name:'payment_status'},
+            {data:'payment_method_name', name:'payment_method_name'},
+            {data:'payment_reff', name:'payment_reff'},
+            {data:'total_price', name:'total_price'},
+            {data:'payment_date', name:'payment_date'},
+            {data:'created_at', name:'created_at'},
         ],
     } );
 </script>
@@ -101,9 +105,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            {{-- <h6 class="m-0 font-weight-bold text-primary ">DataTables Example</h6> --}}
-            <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-plus fa-sm text-white-50"></i> Add Product</a>
+            <h6 class="m-0 font-weight-bold text-primary ">List Transactions</h6>
         </div>
         @if (Session::get('fail'))
         {{Session::get('fail')}}
@@ -114,41 +116,17 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Action</th>
-                            <th>Product Name</th>
-                            <th>Product Code</th>
-                            <th>Product Desc</th>
-                            <th>Price</th>
-                            <th>Created By</th>
+                            <th></th>
+                            <th>No Transaction</th>
+                            <th>Payment Status</th>
+                            <th>Payment Method</th>
+                            <th>Payment Reff</th>
+                            <th>Total Price</th>
+                            <th>Payment Date</th>
+                            <th>Created At</th>
                         </tr>
                     </thead>
-                    {{-- <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th>
-                        </tr>
-                    </tfoot> --}}
                     <tbody>
-                        {{-- <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr>
-                            <td>Garrett Winters</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>63</td>
-                            <td>2011/07/25</td>
-                            <td>$170,750</td>
-                        </tr> --}}
                     </tbody>
                 </table>
             </div>

@@ -7,6 +7,7 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\SalesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,7 @@ use App\Http\Controllers\TransactionController;
 // });
 Route::post('/daftar', [PendaftaranController::class, 'store'])->name('daftar.simpan');
 Route::post('/masuk', [MainController::class, 'masuk'])->name('masuk');
+Route::get('/logout', [MainController::class, 'logout'])->name('logout');
 
 
 Route::group(['middleware'=>['AuthCheck']], function(){
@@ -35,6 +37,7 @@ Route::group(['middleware'=>['AuthCheck']], function(){
     // Route::put('/product/{id}', [ProductController::class, 'destroy'])->name('product.delete');
     Route::resource('product',ProductController::class);
     Route::resource('transaction',TransactionController::class);
+    Route::resource('sales',SalesController::class);
 
 
 });

@@ -22,6 +22,7 @@ class ProductController extends Controller
                 class="fas fa-minus fa-sm text-white-50"></i></button> </form></div></div>';
             })
             ->rawColumns(['action'])
+            ->addIndexColumn()
             ->make();
         }
         return view('dashboard.product.index');

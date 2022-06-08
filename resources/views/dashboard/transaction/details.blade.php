@@ -72,83 +72,103 @@
 
 @section('pageheading')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Product</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+    <a href="{{route('transaction.index')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm "><h1 class="h3 mb-0 text-white-800">Back</h1></a>
+    {{-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> --}}
 </div>
 @endsection
 
 @section('script')
-<script>
+{{-- <script>
     var datatable=$('#dataTable').DataTable( {
         ajax:{
             url:'{!!url()->current()!!}',
         },
         columns:[
-            { data: 'DT_RowIndex', orderable: false, searchable: false },
-            {data:'action', name:'action', orderable:false, searchable:false},
-            {data:'product_name', name:'product_name'},
-            {data:'product_code', name:'product_code'},
-            {data:'product_desc', name:'product_desc'},
-            {data:'product_price', name:'product_price'},
-            {data:'created_by', name:'created_by'},
+            {data: 'DT_RowIndex', orderable: false, searchable: false },
+            {data:'id', name:'id', render: function ( data, type, row, meta ) {
+                return '<a href="'+route('transaction.detail',data)+'"><i class="fas fa-eye"></i></a>';
+            }},
+            {data:'trx_no', name:'trx_no'},
+            {data:'payment_status', name:'payment_status'},
+            {data:'payment_method_name', name:'payment_method_name'},
+            {data:'payment_reff', name:'payment_reff'},
+            {data:'total_price', name:'total_price'},
+            {data:'payment_date', name:'payment_date'},
+            {data:'created_at', name:'created_at'},
         ],
     } );
-</script>
+</script> --}}
 @endsection
 
 @section('content')
+    {{-- header detail --}}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary ">Transaction Header</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    {{-- <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product Name</th>
+                            <th>QTY</th>
+                            <th>Product Price</th>
+                            <th>Total Price</th>
+                        </tr>
+                    </thead> --}}
+                    <tbody>
+                        <tr>
+                            <td>No Reff</td><td>{{$header[0]->trx_no}}</td>
+                        </tr><tr>
+                            <td>Payment Status</td><td>{{$header[0]->payment_status}}</td>
+                        </tr><tr>
+                            <td>Payment Method</td><td>{{$header[0]->payment_method_name}}</td>
+                        </tr><tr>
+                            <td>Payment Reff</td><td>{{$header[0]->payment_reff}}</td>
+                        </tr><tr>
+                            <td>Payment Date</td><td>{{$header[0]->payment_date}}</td>
+                        </tr><tr>
+                            <td>Total Price</td><td>{{$header[0]->total_price}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            {{-- <h6 class="m-0 font-weight-bold text-primary ">DataTables Example</h6> --}}
-            <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                class="fas fa-plus fa-sm text-white-50"></i> Add Product</a>
+            <h6 class="m-0 font-weight-bold text-primary ">Transaction Detail</h6>
         </div>
         @if (Session::get('fail'))
         {{Session::get('fail')}}
-    @endif
+        @endif
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Action</th>
                             <th>Product Name</th>
-                            <th>Product Code</th>
-                            <th>Product Desc</th>
-                            <th>Price</th>
-                            <th>Created By</th>
+                            <th>QTY</th>
+                            <th>Product Price</th>
+                            <th>Total Price</th>
                         </tr>
                     </thead>
-                    {{-- <tfoot>
-                        <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th>
-                        </tr>
-                    </tfoot> --}}
                     <tbody>
-                        {{-- <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                        </tr>
+                        @foreach ($detail as $d)
                         <tr>
-                            <td>Garrett Winters</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>63</td>
-                            <td>2011/07/25</td>
-                            <td>$170,750</td>
-                        </tr> --}}
+                            <td>{{$d->trx_no}}</td>
+                            <td>{{$d->product_name}}</td>
+                            <td>{{$d->qty}}</td>
+                            <td>{{$d->product_price}}</td>
+                            <td>{{$d->total_price*$d->qty}}</td>
+                        </tr>
+                        @endforeach
+                        
                     </tbody>
                 </table>
             </div>
