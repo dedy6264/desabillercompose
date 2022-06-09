@@ -326,10 +326,6 @@
     </div>
 </div>
 
-</div>
-<!-- /.container-fluid -->
-
-</div>
 @endsection
 
 @section('customScript')

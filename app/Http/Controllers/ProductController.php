@@ -42,6 +42,7 @@ class ProductController extends Controller
             'product_desc'=>$request->product_desc,
             'product_cost'=>$request->product_cost,
             'product_price'=>$request->product_price,
+            'status_active'=>1,
             'created_by'=>$user->username,
             'updated_by'=>$user->username,
         ]);

@@ -27,7 +27,9 @@
 		      		<span class="fa fa-user-o"></span>
 		      	</div>
 				  @if (Session::get('fail'))
-					  {{Session::get('fail')}}
+				  <div class="alert alert-danger" role="alert">
+					{{Session::get('fail')}}
+				</div>
 				  @endif
 		      	<h3 class="text-center mb-4">Have an account?</h3>
 						<form action="{{route('masuk')}}" class="login-form" method="post">

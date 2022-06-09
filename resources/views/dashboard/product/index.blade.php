@@ -1,4 +1,6 @@
 @extends('dashboard.app')
+@section('activeMenu','product')
+
 
 @section('customLink')
 {{-- <link href="{{url('admin/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet"> --}}
@@ -84,6 +86,10 @@
         ajax:{
             url:'{!!url()->current()!!}',
         },
+        columnDefs: [{
+                            targets: [5],
+                            render: $.fn.dataTable.render.number( '.', ',', 2)
+                        }],
         columns:[
             { data: 'DT_RowIndex', orderable: false, searchable: false },
             {data:'action', name:'action', orderable:false, searchable:false},
@@ -156,11 +162,3 @@
     </div>
 @endsection
 
-@section('customScript')
-    <!-- Page level plugins -->
-    {{-- <script src="{{url('admin/vendor/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{url('admin/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="{{url('admin/js/demo/datatables-demo.js')}}"></script> --}}
-@endsection

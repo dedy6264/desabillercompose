@@ -9,8 +9,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
-
+    <title>{{strtoupper(request()->path())}} Dashboard {{ env('THEME_TITLE') }}</title>
+{{-- {{dd(request())}} --}}
     <!-- Custom fonts for this template-->
     <link href="{{url('admin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
@@ -23,7 +23,6 @@
 
 </head>
 <body id="page-top">
-
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -47,6 +46,9 @@
 
                     <!-- Content Row -->
                     @yield("content")
+                </div>
+                <!-- /.container-fluid -->
+            </div>
             <!-- End of Main Content -->
              <!-- Footer -->
              @include("dashboard.footer")
@@ -83,6 +85,7 @@
     </div>
 
     @yield('script')
+    @yield('customScript')
     <!-- Bootstrap core JavaScript-->
     <script src="{{url('admin/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{url('admin/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -91,9 +94,8 @@
     <script src="{{url('admin/vendor/jquery-easing/jquery.easing.min.js')}}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="{{url('admin/js/sb-admin-2.min.js')}}"></script>
 
-    @yield('customScript')
+    <script src="{{url('admin/js/sb-admin-2.min.js')}}"></script>
 
 </body>
 

@@ -46,11 +46,11 @@ class CreateUsersTable extends Migration
 
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('trx_no',225);
+            $table->string('trx_no',225)->unique();
             $table->string('payment_status',10);
             $table->timestamp('payment_date');
             $table->unsignedInteger('payment_method_id');
-            $table->string('payment_reff',225)->default(null);
+            $table->string('payment_reff',225)->default(null)->unique();
             $table->unsignedInteger('total_price');
             $table->string('created_by');
             $table->string('updated_by');
@@ -71,9 +71,11 @@ class CreateUsersTable extends Migration
         });
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
+            $table->string('cart_reff',10)->unique();
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('qty');
+            $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('product_id')->references('id')->on('products');
         });

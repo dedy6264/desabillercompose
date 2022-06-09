@@ -84,6 +84,10 @@
         ajax:{
             url:'{!!url()->current()!!}',
         },
+        columnDefs: [{
+                            targets: [6],
+                            render: $.fn.dataTable.render.number( '.', ',', 2)
+                        }],
         columns:[
             {data: 'DT_RowIndex', orderable: false, searchable: false },
             {data:'id', name:'id', render: function ( data, type, row, meta ) {
@@ -134,11 +138,3 @@
     </div>
 @endsection
 
-@section('customScript')
-    <!-- Page level plugins -->
-    {{-- <script src="{{url('admin/vendor/datatables/jquery.dataTables.min.js')}}"></script>
-    <script src="{{url('admin/vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="{{url('admin/js/demo/datatables-demo.js')}}"></script> --}}
-@endsection

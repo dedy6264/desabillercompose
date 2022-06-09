@@ -3,6 +3,7 @@
 @section('customLink')
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
+
 <style>
     /*Form fields*/
     .dataTables_wrapper select,
@@ -78,11 +79,16 @@
 @endsection
 
 @section('script')
+
 <script>
     var datatable=$('#dataTable').DataTable( {
         ajax:{
             url:'{!!url()->current()!!}',
         },
+        columnDefs: [{
+                            targets: [3],
+                            render: $.fn.dataTable.render.number( '.', ',', 2)
+                        }],
         columns:[
             { data: 'DT_RowIndex', orderable: false, searchable: false },
             {data:'product_name', name:'product_name'},
@@ -97,7 +103,7 @@
 @section('content')
 <div class="row">
     <!-- DataTales Example -->
-    <div class="col-md-8">
+    <div class="col-md-7">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 {{-- <h6 class="m-0 font-weight-bold text-primary ">DataTables Example</h6> --}}
@@ -126,14 +132,14 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-5">
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
+            <div class="d-sm-flex card-header py-3 justify-content-between ">
                 <h6 class="m-0 font-weight-bold text-primary ">Cart</h6>
-                {{-- <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-plus fa-sm text-white-50"></i> Add Product</a> --}}
+                <a href="{{route('sales.reset')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm entek"><i
+                    class="fas fa-plus fa-sm text-white-50"></i> Reset</a>
             </div>
-            <div class="card-body">
+            <div class="card-body product-cart">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataCart" width="100%" cellspacing="0">
                         <thead>
@@ -141,40 +147,218 @@
                                 <th>#</th>
                                 <th>Product Name</th>
                                 <th>Product Code</th>
+                                <th>Product Price</th>
                                 <th>qty</th>
                                 <th>Total Price</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                        <tr>
-                            <th colspan="4">Total</th>
-                            <th>25000</th>
-                        </tr>
-                    </tfoot>
                         <tbody>
+                            @php $no = 1;
+                            $subTotal=0;
+                            @endphp
+                            {{-- {{$cart[0]['product_name']}} --}}
+                            @for ($i=0;$i<count($cart);$i++)
+                            @php
+                                $subTotal=$subTotal+($cart[$i]['qty']*$cart[$i]['product_price']);
+                            @endphp    
+                            @endfor
+                            @foreach ($cart as $d)
                             <tr>
+                                <td>{{$no++}}</td>
+                                <td>{{$d->product_name}}</td>
+                                <td>{{$d->product_code}}</td>
+                                <td>{{$d->product_price}}</td>
+                                <td>{{$d->qty}}</td>
+                                <td>{{$d->qty*$d->product_price}}</td>
+                            </tr>
+                            @endforeach
+
+                            {{-- <tr>
                             <td>1</td>
                             <td>Pensil</td>
                             <td>PN001</td>
                             <td>61</td>
-                            <td>2500</td>
+                            <td>3000 --}}
+                                
+{{-- <div class="row product-cart">
+    <div class="col-md-4">
+        <div class="input-group mb-3" style="width: 130px">
+            <button class="input-group-text decrement-btn">-</button>
+            <input type="text" name="" id="" class="form-control text-center input-qty bg-white" value="1" disabled>
+            <button class="input-group-text increment-btn">+</button>
+        </div>
+    </div>
+</div> --}}
+
+                            {{-- </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Buku</td>
-                            <td>BkK001</td>
-                            <td>63</td>
-                            <td>2500</td>
-                        </tr>
+                         --}}
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="5">Total</th>
+                                <th>{{$subTotal}}</th>
+                            </tr>
+                        </tfoot>
                     </table>
                     <div>
-                        <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        {{-- link modal --}}
+                        @if (count($cart)=='')
+                        <a href="#" data-toggle="modal" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm modalEmpty"><i
                             class="fas fa-plus fa-sm text-white-50"></i> Bayar</a>
+                        @else  
+                        @php
+                            $idCart=$cart[0]['user_id'];
+                        @endphp   
+                        <a href="#" data-toggle="modal" data-target="#exampleModalCenter" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                            class="fas fa-plus fa-sm text-white-50"></i> Bayar</a>
+                        @endif
+                             <!-- Modal invoice -->
+                             <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable " role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h3 class="modal-title" id="exampleModalLongTitle">Invoice</h3>
+                                      {{-- <div class="row">
+                                          <div class="col-md-6">
+                                            <h5>PT. ABC</h5>
+                                            <p>Jl. Kedungmundu Raya</p>
+                                          </div>
+                                      </div> --}}
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">                              
+                                       {{-- body --}}
+                                    <table class="table table-bordered" id="dataCart" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Product Name</th>
+                                                <th>Product Code</th>
+                                                <th>Product Price</th>
+                                                <th>qty</th>
+                                                <th>Total Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php $no = 1;
+                                            @endphp
+                                            @foreach ($cart as $d)
+                                            <tr>
+                                                <td>{{$no++}}</td>
+                                                <td>{{$d->product_name}}</td>
+                                                <td>{{$d->product_code}}</td>
+                                                <td>{{$d->product_price}}</td>
+                                                <td>{{$d->qty}}</td>
+                                                <td>{{$d->qty*$d->product_price}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="5">Total</th>
+                                                <th>{{$subTotal}}</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                        {{-- end body --}}
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      <button type="button" class="btn btn-primary" data-dismiss="modal" data-toggle="modal" data-target="#modalPayment">Pembayaran</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              {{-- modal payment --}}
+                              <div class="modal fade" id="modalPayment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">Payment</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                        @foreach ($payment as $pay)
+                                          <div class="col-md-12 mb-4">
+                                            <form action="{{route('sales.store')}}" method="post">
+                                                @csrf
+                                                <input type="text" name="payment_id" value="{{$pay->id}}" hidden>
+                                                <button class="btn btn-success  btn-lg btn-block" type="submit" value="submit">{{$pay->payment_method_name}}</button>
+                                            </form>
+                                          </div>
+                                          @endforeach
+                                        </div>
+                                    </div>
+                                    {{-- <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      <button type="button" class="btn btn-primary" >Save</button>
+                                    </div> --}}
+                                  </div>
+                                </div>
+                              </div>
+                              {{-- endmodal payment --}}
+                             {{-- <div> --}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
+@endsection
+
+@section('customScript')
+<script>
+$('#myModal').on('shown.bs.modal', function () {
+    
+  $('#myInput').trigger('focus')
+})
+$('.modalEmpty').click(function(event){
+    event.preventDefault();
+    var note="keranjang masih kosong";
+    alert(note);
+});
+
+
+    $('.increment-btn').click(function(event) {
+      event.preventDefault();
+      var qty=$(this).closest('.product-cart').find('.input-qty').val();
+    //   alert(qty);
+    var value=parseInt(qty,10)
+    value=isNaN(value) ? 0 : value;
+    if(value<10){
+        value++;
+        $(this).closest('.product-cart').find('.input-qty').val(value);
+    }
+    });
+
+    $('.decrement-btn').click(function(event) {
+      event.preventDefault();
+      var qty=$(this).closest('.product-cart').find('.input-qty').val();
+    //   alert(qty);
+    var value=parseInt(qty,10)
+    value=isNaN(value) ? 0 : value;
+    if(value>1){
+        value--;
+        $(this).closest('.product-cart').find('.input-qty').val(value);
+    }
+    });
+
+
+    $('.addCart').click(function(event) {
+      event.preventDefault();
+    //   var qty=$(this).closest('.product-cart').find('.addCart').val();
+
+      var idProd=$(this).val();
+      alert(idProd);
+    });
+</script>
 @endsection
