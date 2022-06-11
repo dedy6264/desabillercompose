@@ -107,7 +107,7 @@
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 {{-- <h6 class="m-0 font-weight-bold text-primary ">DataTables Example</h6> --}}
-                <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" title="Tambah data produk"><i
                     class="fas fa-plus fa-sm text-white-50"></i> Add Product</a>
             </div>
             @if (Session::get('fail'))
@@ -136,7 +136,7 @@
         <div class="card shadow mb-4">
             <div class="d-sm-flex card-header py-3 justify-content-between ">
                 <h6 class="m-0 font-weight-bold text-primary ">Cart</h6>
-                <a href="{{route('sales.reset')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm entek"><i
+                <a href="{{route('sales.reset')}}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm entek" title="kosongkan keranjang"><i
                     class="fas fa-plus fa-sm text-white-50"></i> Reset</a>
             </div>
             <div class="card-body product-cart">
@@ -204,13 +204,13 @@
                     <div>
                         {{-- link modal --}}
                         @if (count($cart)=='')
-                        <a href="#" data-toggle="modal" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm modalEmpty"><i
+                        <a href="#" data-toggle="modal" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm modalEmpty" title="Lanjutkan Pembayaran"><i
                             class="fas fa-plus fa-sm text-white-50"></i> Bayar</a>
                         @else  
                         @php
                             $idCart=$cart[0]['user_id'];
                         @endphp   
-                        <a href="#" data-toggle="modal" data-target="#exampleModalCenter" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                        <a href="#" data-toggle="modal" data-target="#exampleModalCenter" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" title="Lanjutkan Pembayaran"><i
                             class="fas fa-plus fa-sm text-white-50"></i> Bayar</a>
                         @endif
                              <!-- Modal invoice -->
@@ -295,10 +295,6 @@
                                           @endforeach
                                         </div>
                                     </div>
-                                    {{-- <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                      <button type="button" class="btn btn-primary" >Save</button>
-                                    </div> --}}
                                   </div>
                                 </div>
                               </div>

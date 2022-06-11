@@ -35,6 +35,7 @@ Route::group(['middleware'=>['AuthCheck']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Route::get('/product', [ProductController::class, 'index'])->name('product');
     // Route::put('/product/{id}', [ProductController::class, 'destroy'])->name('product.delete');
+    Route::resource('user',UserController::class);
     Route::resource('product',ProductController::class);
     Route::resource('transaction',TransactionController::class);
 

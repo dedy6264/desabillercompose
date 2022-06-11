@@ -41,7 +41,31 @@
             </div>
         </div>
     </li> --}}
-    
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        User
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item {{in_Array(request()->path(),['user','otorisasi']) ? 'active':''}}">
+        {{-- collapsed --}}
+        <a class="nav-link {{in_Array(request()->path(),['user','otorisasi']) ? 'collapsed':''}}" href="#" data-toggle="collapse" data-target="#collapseProduct"
+            aria-expanded="{{in_Array(request()->path(),['user','otorisasi']) ? 'true':''}}" aria-controls="collapseProduct">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>User</span>
+        </a>
+        <div id="collapseProduct" class="collapse {{in_Array(request()->path(),['user','otorisasi']) ? 'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Components:</h6>
+                <a class="collapse-item {{in_Array(request()->path(),['user']) ? 'active':''}}" href="{{route('user.index')}}">User</a>
+                <a class="collapse-item {{in_Array(request()->path(),['otorisasi']) ? 'active':''}}" href="{{route('transaction.index')}}">Otorisasi</a>
+            </div>
+        </div>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -68,29 +92,6 @@
         </div>
     </li>
 
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Transaksi
-    </div>
-
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-            aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Produk</span>
-        </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item" href="buttons.html">Transaksi</a>
-                <a class="collapse-item" href="cards.html">Cards</a>
-            </div>
-        </div>
-    </li>
     <!-- Nav Item - Pages Collapse Menu -->
     {{-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"

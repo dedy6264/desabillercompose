@@ -91,10 +91,21 @@
         columns:[
             {data: 'DT_RowIndex', orderable: false, searchable: false },
             {data:'id', name:'id', render: function ( data, type, row, meta ) {
-                return '<a href="transaction/'+data+'"><i class="fas fa-eye"></i></a>';
+                return '<a href="transaction/'+data+'" ><i class="fas fa-eye" title="Lihat detail"></i></a>';
             }},
             {data:'trx_no', name:'trx_no'},
-            {data:'payment_status', name:'payment_status'},
+            {data:'payment_status', name:'payment_status',render: function ( data ) {
+                                var color;
+                                var desc;
+                                if (data == "00") {
+                                    color = "text-success";
+                                    desc = "SUCCESS";
+                                }else {
+                                    color = "text-danger";
+                                    desc = "PENDING";
+                                }
+                                return '<span class="'+ color +'">'+desc+'</span>';
+            }},
             {data:'payment_method_name', name:'payment_method_name'},
             {data:'payment_reff', name:'payment_reff'},
             {data:'total_price', name:'total_price'},
@@ -106,14 +117,49 @@
 @endsection
 
 @section('content')
+{{-- fiter --}}
+    <div class="card shadow mb-4">
+        <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary ">Filter</h6></div>
+        <div class="card-body">
+            <form action="{{route('transaction.index')}}" method="post">
+                @csrf
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <label for="start_date">Start Date</label>
+                    <input type="date" name="start_date" id="start_date" class="form-control">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="end_date">End Date</label>
+                    <input type="date" name="end_date" id="end_date" class="form-control">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="status">Status</label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="">All</option>
+                        <option value="">Pending</option>
+                        <option value="">Success</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="sales">Sales</label>
+                    <select name="sales" id="sales" class="form-control">
+                        <option value="">All</option>
+                        <option value="">Andi</option>
+                        <option value="">Dito</option>
+                    </select>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <button class="btn btn-primary" type="button">Primary</button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary ">List Transactions</h6>
         </div>
-        @if (Session::get('fail'))
-        {{Session::get('fail')}}
-    @endif
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

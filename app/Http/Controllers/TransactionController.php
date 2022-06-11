@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class TransactionController extends Controller
 {
@@ -17,16 +18,13 @@ class TransactionController extends Controller
                 // return Datatables::of($query)
                 return datatables()->of($mainData)
                 ->addIndexColumn()
+                ->editColumn('created_at', function($item){
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $item->created_at)->format('Y-m-d H:i:s');
+                })
                 ->make();
             }
         return view('dashboard.transaction.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
     public function show(Transaction $transaction)
     {
         // dd($transaction->id);

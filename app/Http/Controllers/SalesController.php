@@ -8,6 +8,8 @@ use App\Http\Requests\SalesRequest;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use DB;
+use Illuminate\Support\Str;
+
 class SalesController extends Controller
 {
     public function index()
@@ -21,7 +23,8 @@ class SalesController extends Controller
                     <form action="'.route('sales.addCart').'" method="post">
                     '.@csrf_field().'
                         <input type"text" name="id" value="'.$item->id.'" hidden ></input>
-                        <button type="submit" value="submit" class="addCart">+</button>
+                        <button type="submit" value="submit" class="addCart d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" title="Tambah ke keranjang"><i
+                        class="fas fa-plus fa-sm text-white-50"></i>Add to cart</button>
                     </form
                     ';
                 })
@@ -43,43 +46,14 @@ class SalesController extends Controller
         return view('dashboard.sales.tabel',compact('cart','payment'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
-    {
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-//         DB::beginTransaction();
-
-// try {
-//     DB::insert(...);
-//     DB::insert(...);
-//     DB::insert(...);
-
-//     DB::commit();
-//     // all good
-// } catch (\Exception $e) {
-//     DB::rollback();
-//     // something went wrong
-// }
-
         DB::beginTransaction();
         try {
             if($request->payment_id==1){
                 $cart=$this->cart();
                 $total=0;
-                $trx_no=$cart[0]['cart_reff'];
+                $trx_no="AME".Str::random(5);
                 for($i=0;$i<count($cart);$i++){
                     $total=$total+($cart[$i]['qty']*$cart[$i]['product_price']);
                 }
@@ -88,7 +62,7 @@ class SalesController extends Controller
                     'payment_status'=>"00",
                     'payment_date'=>now(),
                     'payment_method_id'=>$request->payment_id,
-                    'payment_reff'=>"reff".now(),
+                    'payment_reff'=>"reff".Str::random(15),
                     'total_price'=>$total,
                     'created_by'=>"admin",
                     'updated_by'=>"admin",
@@ -124,13 +98,16 @@ class SalesController extends Controller
 
     public function addCart(SalesRequest $request)
     {
+        
         $idUser=session('LoggedUser');
         $idProd=$request->id;
+        //cek produk
         $check=Sales::where('user_id',$idUser)
         ->where('product_id',$idProd)
         ->select('*')
         ->first();
         if($check!=null){
+            //jika ada tambah qty
             $qty=$check->qty+1;
             Sales::where('id',$check->id)
             ->update([
@@ -138,13 +115,14 @@ class SalesController extends Controller
             ]);
             return redirect()->route('sales.index');
         }else{
+            //jika tdk ada add baru
             $payload=[
                 'user_id'=>$idUser,
                 'product_id'=>$idProd,
                 'qty'=>1,
-                'cart_reff'=>"MBA".$idUser.$idProd,
+                'cart_reff'=>"MBA".$idUser.$idProd.Str::random(5),
             ];
-                Sales::create($payload);
+            Sales::create($payload);
             return redirect()->route('sales.index');
         }
     }
