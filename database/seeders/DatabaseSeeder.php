@@ -168,6 +168,8 @@ class DatabaseSeeder extends Seeder
             'total_price'=>4000,
             'created_by'=>'admin',
             'updated_by'=>'admin',
+            'created_at'=>now(),
+            'updated_at'=>now(),
         ],[
             'trx_no'=>'KSR'.now().'002',
             'payment_status'=>'PAYMENT',
@@ -177,6 +179,8 @@ class DatabaseSeeder extends Seeder
             'total_price'=>4000,
             'created_by'=>'admin',
             'updated_by'=>'admin',
+            'created_at'=>now(),
+            'updated_at'=>now(),
         ]]);
 
         TrxDetail::insert([[
