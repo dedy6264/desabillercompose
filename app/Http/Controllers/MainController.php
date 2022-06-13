@@ -39,23 +39,5 @@ class MainController extends Controller
         return redirect()->route('index');
     }
 
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
-    }
+   
 }

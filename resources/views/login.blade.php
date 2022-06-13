@@ -61,10 +61,10 @@
 		</div>
 	</section>
 
-	<script src="{{url('login/js/jquery.min.js"></script>
-  <script src="{{url('login/js/popper.js"></script>
-  <script src="{{url('login/js/bootstrap.min.js"></script>
-  <script src="{{url('login/js/main.js"></script>
+	<script src="{{url('login/js/jquery.min.js')}}"></script>
+  <script src="{{url('login/js/popper.js')}}"></script>
+  <script src="{{url('login/js/bootstrap.min.js')}}"></script>
+  <script src="{{url('login/js/main.js')}}"></script>
 
 	</body>
 </html>
