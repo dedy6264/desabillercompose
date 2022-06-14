@@ -18,7 +18,7 @@ class AuthCheck
     {
         // dd($request->path());
         if(!session()->has('LoggedUser') && ($request->path() != '/' && $request->path() != 'daftar')){
-            return redirect('index')->with('fail', 'you musht be logged in');
+            return back()->with('fail', 'you must be logged in');
         }
         if(session()->has('LoggedUser')&&($request->path()=='/' || $request->path()=='daftar')){
             return back();

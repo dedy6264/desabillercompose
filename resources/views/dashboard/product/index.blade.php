@@ -1,7 +1,9 @@
 @extends('dashboard.app')
-@section('activeMenu','product')
-
-
+@section('activeMenu')
+@php
+    $activeMenu="product";
+@endphp
+@endsection
 @section('customLink')
 {{-- <link href="{{url('admin/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet"> --}}
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">

@@ -27,7 +27,7 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
+    <li class="nav-item ">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser"
             aria-expanded="true" aria-controls="collapseUser">
             <i class="fas fa-fw fa-cog"></i>
@@ -51,18 +51,19 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item {{in_Array(request()->path(),['user','otorisasi']) ? 'active':''}}">
+    <li class="nav-item {{in_Array($activeMenu,['user','otorisasi']) ? 'active':''}}">
         {{-- collapsed --}}
-        <a class="nav-link {{in_Array(request()->path(),['user','otorisasi']) ? 'collapsed':''}}" href="#" data-toggle="collapse" data-target="#collapseProduct"
-            aria-expanded="{{in_Array(request()->path(),['user','otorisasi']) ? 'true':''}}" aria-controls="collapseProduct">
+        <!-- {{dump($activeMenu)}} -->
+        <a class="nav-link {{in_Array($activeMenu,['user','otorisasi']) ? 'collapsed':''}}" href="#" data-toggle="collapse" data-target="#collapseUser"
+            aria-expanded="{{in_Array($activeMenu,['user','otorisasi']) ? 'true':''}}" aria-controls="collapseUser">
             <i class="fas fa-fw fa-cog"></i>
             <span>User</span>
         </a>
-        <div id="collapseProduct" class="collapse {{in_Array(request()->path(),['user','otorisasi']) ? 'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseUser" class="collapse {{in_Array($activeMenu,['user','otorisasi']) ? 'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item {{in_Array(request()->path(),['user']) ? 'active':''}}" href="{{route('user.index')}}">User</a>
-                <a class="collapse-item {{in_Array(request()->path(),['otorisasi']) ? 'active':''}}" href="{{route('transaction.index')}}">Otorisasi</a>
+                <a class="collapse-item {{in_Array($activeMenu,['user']) ? 'active':''}}" href="{{route('user.index')}}">User</a>
+                <a class="collapse-item {{in_Array($activeMenu,['otorisasi']) ? 'active':''}}" href="{{route('transaction.index')}}">Otorisasi</a>
             </div>
         </div>
     </li>
@@ -75,19 +76,19 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item {{in_Array(request()->path(),['product','transaction','sales']) ? 'active':''}}">
+    <li class="nav-item {{in_Array($activeMenu,['product','transaction','sales']) ? 'active':''}}">
         {{-- collapsed --}}
-        <a class="nav-link {{in_Array(request()->path(),['product','transaction','sales']) ? 'collapsed':''}}" href="#" data-toggle="collapse" data-target="#collapseProduct"
-            aria-expanded="{{in_Array(request()->path(),['product','transaction','sales']) ? 'true':''}}" aria-controls="collapseProduct">
+        <a class="nav-link {{in_Array($activeMenu,['product','transaction','sales']) ? 'collapsed':''}}" href="#" data-toggle="collapse" data-target="#collapseProduct"
+            aria-expanded="{{in_Array($activeMenu,['product','transaction','sales']) ? 'true':''}}" aria-controls="collapseProduct">
             <i class="fas fa-fw fa-cog"></i>
             <span>Produk</span>
         </a>
-        <div id="collapseProduct" class="collapse {{in_Array(request()->path(),['product','transaction','sales']) ? 'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseProduct" class="collapse {{in_Array($activeMenu,['product','transaction','sales']) ? 'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item {{in_Array(request()->path(),['product']) ? 'active':''}}" href="{{route('product.index')}}">Produk</a>
-                <a class="collapse-item {{in_Array(request()->path(),['transaction']) ? 'active':''}}" href="{{route('transaction.index')}}">Transaksi</a>
-                <a class="collapse-item {{in_Array(request()->path(),['sales']) ? 'active':''}}" href="{{route('sales.index')}}">Penjualan</a>
+                <a class="collapse-item {{in_Array($activeMenu,['product']) ? 'active':''}}" href="{{route('product.index')}}">Produk</a>
+                <a class="collapse-item {{in_Array($activeMenu,['transaction']) ? 'active':''}}" href="{{route('transaction.index')}}">Transaksi</a>
+                <a class="collapse-item {{in_Array($activeMenu,['sales']) ? 'active':''}}" href="{{route('sales.index')}}">Penjualan</a>
             </div>
         </div>
     </li>

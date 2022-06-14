@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
     <title>{{strtoupper(request()->path())}} Dashboard {{ env('THEME_TITLE') }}</title>
-{{-- {{dd(request())}} --}}
+<!-- {{-- {{dd(request())}} --}} -->
     <!-- Custom fonts for this template-->
     <link href="{{url('admin/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link
@@ -27,6 +27,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
+        <!-- @yield("activeMenu") -->
         @include("dashboard.sidebar")
         <!-- End of Sidebar -->
         <!-- Content Wrapper -->

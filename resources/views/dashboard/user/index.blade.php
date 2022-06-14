@@ -1,7 +1,9 @@
 @extends('dashboard.app')
-@section('activeMenu','product')
-
-
+@section('activeMenu')
+@php
+    $activeMenu="user";
+@endphp
+@endsection
 @section('customLink')
 {{-- <link href="{{url('admin/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet"> --}}
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -104,7 +106,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             {{-- <h6 class="m-0 font-weight-bold text-primary ">DataTables Example</h6> --}}
-            <a href="{{route('product.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            <a href="{{route('user.create')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                 class="fas fa-plus fa-sm text-white-50"></i> Add User</a>
         </div>
         @if (Session::get('fail'))

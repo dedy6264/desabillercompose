@@ -1,5 +1,9 @@
 @extends('dashboard.app')
-
+@section('activeMenu')
+@php
+    $activeMenu="";
+@endphp
+@endsection
 @section('pageheading')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
@@ -298,7 +302,7 @@
             <div class="card-body">
                 <div class="text-center">
                     <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                        src="img/undraw_posting_photo.svg" alt="...">
+                        src="{{url('admin/img/undraw_posting_photo.svg')}}" alt="...">
                 </div>
                 <p>Add some quality, svg illustrations to your project courtesy of <a
                         target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
