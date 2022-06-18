@@ -27,6 +27,7 @@ Route::post('/daftar', [PendaftaranController::class, 'store'])->name('daftar.si
 Route::post('/masuk', [MainController::class, 'masuk'])->name('masuk');
 Route::get('/logout', [MainController::class, 'logout'])->name('logout');
 
+Route::post('/transaction/filter', [TransactionController::class,'filter'])->name('transaction.aa');
 
 Route::group(['middleware'=>['AuthCheck']], function(){
     Route::get('/', [MainController::class, 'index'])->name('index');

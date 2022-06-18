@@ -54,7 +54,7 @@
     <li class="nav-item {{in_Array($activeMenu,['user','otorisasi']) ? 'active':''}}">
         {{-- collapsed --}}
         <!-- {{dump($activeMenu)}} -->
-        <a class="nav-link {{in_Array($activeMenu,['user','otorisasi']) ? 'collapsed':''}}" href="#" data-toggle="collapse" data-target="#collapseUser"
+        <a class="nav-link {{in_Array($activeMenu,['user','otorisasi']) ? '':'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapseUser"
             aria-expanded="{{in_Array($activeMenu,['user','otorisasi']) ? 'true':''}}" aria-controls="collapseUser">
             <i class="fas fa-fw fa-cog"></i>
             <span>User</span>
@@ -67,18 +67,11 @@
             </div>
         </div>
     </li>
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Product
-    </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item {{in_Array($activeMenu,['product','transaction','sales']) ? 'active':''}}">
         {{-- collapsed --}}
-        <a class="nav-link {{in_Array($activeMenu,['product','transaction','sales']) ? 'collapsed':''}}" href="#" data-toggle="collapse" data-target="#collapseProduct"
+        <a class="nav-link {{in_Array($activeMenu,['product','transaction','sales']) ? '':'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapseProduct"
             aria-expanded="{{in_Array($activeMenu,['product','transaction','sales']) ? 'true':''}}" aria-controls="collapseProduct">
             <i class="fas fa-fw fa-cog"></i>
             <span>Produk</span>
@@ -92,9 +85,15 @@
             </div>
         </div>
     </li>
+<!-- Divider -->
+<hr class="sidebar-divider">
 
+<!-- Heading -->
+<div class="sidebar-heading">
+    Front End
+</div>
     <!-- Nav Item - Pages Collapse Menu -->
-    {{-- <li class="nav-item">
+     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
@@ -102,13 +101,16 @@
         </a>
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item" href="buttons.html">Buttons</a>
-                <a class="collapse-item" href="cards.html">Cards</a>
+                <h6 class="collapse-header">Custom FrontEnd:</h6>
+                <a class="collapse-item" href="buttons.html">Landing Page</a>
+                <a class="collapse-item" href="cards.html">Slide Project</a>
+                <a class="collapse-item" href="cards.html">Step</a>
+                <a class="collapse-item" href="cards.html">Motto</a>
+                <a class="collapse-item" href="cards.html">Gallery</a>
             </div>
         </div>
     </li>
-
+    {{--
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
