@@ -42,14 +42,18 @@ class TransactionController extends Controller
     }           
     public function filter(Request $request)
     {
+        // dd(request()->all());  
         // $mainData=$this->all($request);
        
+        // \DB::enableQueryLog(); // Enable query log
+
+    $mainData=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
+    ->whereBetween('transactions.created_at',[$request->startDate,$request->endDate])
+    ->select('transactions.*','payments.payment_method_name')
+    ->get();
+            // dd(\DB::getQueryLog()); // Show results of log
         if(request()->ajax()){
-            $mainData=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
-            ->whereBetween('transactions.created_at',[$request->startDate.' 00:00:00',$request->endDate.' 23:59:59'])
-            ->select('transactions.*','payments.payment_method_name')
-            ->get();
-            // dd(request()->ajax());  
+            
                 return datatables()->of($mainData)
                 ->addIndexColumn()
                 ->editColumn('created_at', function($item){

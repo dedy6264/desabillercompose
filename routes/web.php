@@ -27,18 +27,18 @@ Route::post('/daftar', [PendaftaranController::class, 'store'])->name('daftar.si
 Route::post('/masuk', [MainController::class, 'masuk'])->name('masuk');
 Route::get('/logout', [MainController::class, 'logout'])->name('logout');
 
-Route::post('/transaction/filter', [TransactionController::class,'filter'])->name('transaction.aa');
 
 Route::group(['middleware'=>['AuthCheck']], function(){
     Route::get('/', [MainController::class, 'index'])->name('index');
     Route::get('/daftar', [PendaftaranController::class, 'index'])->name('daftar');
-
+    
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Route::get('/product', [ProductController::class, 'index'])->name('product');
     // Route::put('/product/{id}', [ProductController::class, 'destroy'])->name('product.delete');
     Route::resource('user',UserController::class);
     Route::resource('product',ProductController::class);
     Route::resource('transaction',TransactionController::class);
+    Route::post('/transaction/filter', [TransactionController::class,'filter'])->name('transaction.aa');
 
     Route::post('/sales/cart', [SalesController::class,'addCart'])->name('sales.addCart');
     Route::get('/sales/reset', [SalesController::class,'reset'])->name('sales.reset');
