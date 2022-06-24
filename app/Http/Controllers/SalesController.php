@@ -151,8 +151,18 @@ class SalesController extends Controller
     }
     public function print($req){
        $data=Transaction::join('trx_details','transactions.id','=','trx_details.transaction_id')
+       ->join('products','trx_details.product_id','=','products.id')
+       ->join('payments','transactions.payment_method_id','=','payments.id')
        ->where('transactions.id',$req)
-       ->select('')
-    return view('dashboard.sales.print',compact('a','b'));
+       ->select('transactions.trx_no',
+       'transactions.payment_status',
+       'transactions.payment_date',
+       'payments.payment_method_name',
+       'products.product_name',
+       'products.product_price',
+       'trx_details.qty')
+       ->get();
+    //    dd($data);
+    return view('dashboard.sales.print',compact('data'));
     }
 }

@@ -172,7 +172,7 @@
                             <td>{{$d->product_name}}</td>
                             <td>{{$d->qty}}</td>
                             <td>{{$d->product_price}}</td>
-                            <td>{{$d->total_price*$d->qty}}</td>
+                            <td>{{$d->product_price*$d->qty}}</td>
                         </tr>
                         @endforeach
                         

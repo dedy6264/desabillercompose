@@ -25,12 +25,9 @@ class TransactionController extends Controller
         'name' => 'ALL'
        ]);
 
-                \DB::enableQueryLog(); // Enable query log
+                // \DB::enableQueryLog(); // Enable query log
        $main=Transaction::join('users','transactions.created_by','=','users.name')
        ->join('payments','transactions.payment_method_id','=','payments.id')     
-                // ->when($request->startDate!=true,function($query,$request){
-                //     return $query->whereBetween('transactions.created_at',[$request->startDate.' 00:00:00',$request->endDate.' 23:59:59']);
-                // })
                 ->when($request->sales!='-1',function($query)use($request){
                    return $query->where('users.id',$request->sales);
                 })
@@ -44,19 +41,22 @@ class TransactionController extends Controller
                  ->when($request->status!='',function($query)use($request){
                     return $query->where('transactions.payment_status',$request->status);
                  })
+                 ->orderBy('transactions.payment_date','desc')
                 ->select('transactions.*','payments.payment_method_name')
                 ->get();
-                                    dump(\DB::getQueryLog()); // Show results of log
-                                    dump($main);
+                                    // dump(\DB::getQueryLog()); // Show results of log
+                                    // dump($main);
            
             if(!$request->startDate){
                 $main=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
                 ->whereBetween('transactions.created_at',[$startDate.' 00:00:00',$endDate.' 23:59:59'])
+                ->orderBy('transactions.payment_date','desc')
                 ->select('transactions.*','payments.payment_method_name')
                 ->get();
             }else{
                 $main=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
                 ->whereBetween('transactions.created_at',[$request->startDate.' 00:00:00',$request->endDate.' 23:59:59'])
+                ->orderBy('transactions.payment_date','desc')
                 ->select('transactions.*','payments.payment_method_name')
                 ->get();
             }
@@ -68,7 +68,6 @@ class TransactionController extends Controller
         
         return view('dashboard.transaction.index',compact('main','user'));
     }           
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
     public function show(Transaction $transaction)
     {
         $header=Transaction::join('payments','transactions.payment_method_id','=','payments.id')

@@ -315,7 +315,7 @@
 
 @endsection
 
-@section('customScript')
+@section('customScript')    
 <script>
 $('#myModal').on('shown.bs.modal', function () {
     
@@ -361,8 +361,5 @@ $('.modalEmpty').click(function(event){
       alert(idProd);
     });
 
-    $(document).ready(function(){
-    $('.btnprn').printPage();
-    });
 </script>
 @endsection
