@@ -71,7 +71,7 @@ class CreateUsersTable extends Migration
         });
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->string('cart_reff',10)->unique();
+            $table->string('cart_reff',50)->unique();
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('qty');

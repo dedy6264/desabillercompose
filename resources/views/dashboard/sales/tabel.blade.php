@@ -293,7 +293,7 @@
                                             <form action="{{route('sales.store')}}" method="post">
                                                 @csrf
                                                 <input type="text" name="payment_id" value="{{$pay->id}}" hidden>
-                                                <button class="btn btn-success  btn-lg btn-block" type="submit" value="submit">{{$pay->payment_method_name}}</button>
+                                                <button class="btnprn btn btn-success  btn-lg btn-block" type="submit" value="submit">{{$pay->payment_method_name}}</button>
                                             </form>
                                           </div>
                                           @endforeach
@@ -359,6 +359,10 @@ $('.modalEmpty').click(function(event){
 
       var idProd=$(this).val();
       alert(idProd);
+    });
+
+    $(document).ready(function(){
+    $('.btnprn').printPage();
     });
 </script>
 @endsection

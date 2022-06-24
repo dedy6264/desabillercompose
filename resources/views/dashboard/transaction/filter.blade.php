@@ -4,10 +4,13 @@
     $activeMenu="transaction";
 @endphp
 @endsection
+
 @section('customLink')
 {{-- <link href="{{url('admin/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet"> --}}
 <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet">
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicket.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js"></script> --}}
 <style>
     /*Form fields*/
     .dataTables_wrapper select,
@@ -85,43 +88,76 @@
 
 @section('script')
 <script>
-    var datatable=$('#dataTable1').DataTable( {
-        ajax:{
-            url:'{!!url()->current()!!}',
-            type: "post",
-            data: {
-        "_token": "{{ csrf_token() }}"
-        },
-        },
-        columnDefs: [{
-                            targets: [6],
-                            render: $.fn.dataTable.render.number( '.', ',', 2)
-                        }],
-        columns:[
-            {data: 'DT_RowIndex', orderable: false, searchable: false },
-            {data:'id', name:'id', render: function ( data, type, row, meta ) {
-                return '<a href="transaction/'+data+'" ><i class="fas fa-eye" title="Lihat detail"></i></a>';
-            }},
-            {data:'trx_no', name:'trx_no'},
-            {data:'payment_status', name:'payment_status',render: function ( data ) {
-                                var color;
-                                var desc;
-                                if (data == "00") {
-                                    color = "text-success";
-                                    desc = "SUCCESS";
-                                }else {
-                                    color = "text-danger";
-                                    desc = "PENDING";
-                                }
-                                return '<span class="'+ color +'">'+desc+'</span>';
-            }},
-            {data:'payment_method_name', name:'payment_method_name'},
-            {data:'payment_reff', name:'payment_reff'},
-            {data:'total_price', name:'total_price'},
-            {data:'payment_date', name:'payment_date'},
-            {data:'created_at', name:'created_at'},
-        ],
-    } );
+    $(document).ready(function(){
+
+        // $('.input-daterange').datepicker({
+        //     todayBtn:'linked',
+        //     format:'yyyy-mm-dd',
+        //     autoclose:true
+        // });
+        function load_data(startDate='',endDate=''){
+            $('#dataTable1').DataTable( {
+                processing: true, 
+                serverSide: true, 
+                ajax:{
+                    url:'{!!url()->current()!!}',
+                    type: "post",
+                    headers: {'X-CSRF-TOKEN': "{{ csrf_token() }}"},
+                    data:{
+                        startDate:startDate,
+                        endDate:endDate
+                    }
+                
+                },
+                columnDefs: [{
+                                    targets: [6],
+                                    render: $.fn.dataTable.render.number( '.', ',', 2)
+                                }],
+                columns:[
+                    {data: 'DT_RowIndex', orderable: false, searchable: false },
+                    {data:'id', name:'id', render: function ( data, type, row, meta ) {
+                        return '<a href="transaction/'+data+'" ><i class="fas fa-eye" title="Lihat detail"></i></a>';
+                    }},
+                    {data:'trx_no', name:'trx_no'},
+                    {data:'payment_status', name:'payment_status',render: function ( data ) {
+                                        var color;
+                                        var desc;
+                                        if (data == "00") {
+                                            color = "text-success";
+                                            desc = "SUCCESS";
+                                        }else {
+                                            color = "text-danger";
+                                            desc = "PENDING";
+                                        }
+                                        return '<span class="'+ color +'">'+desc+'</span>';
+                    }},
+                    {data:'payment_method_name', name:'payment_method_name'},
+                    {data:'payment_reff', name:'payment_reff'},
+                    {data:'total_price', name:'total_price'},
+                    {data:'payment_date', name:'payment_date'},
+                    {data:'created_at', name:'created_at'},
+                ],
+            } );
+        }
+        $('#search-form').click(function(){
+            var startDate=$('#startDate').val();
+            var endDate=$('#endDate').val();
+            
+            if(startDate!='' && endDate!=''){
+                $('#dataTable1').DataTable().destroy();
+                // load_data(startDate,endDate);
+            }else{
+                alert("harus set semua bro");
+            }
+        });
+        // $('#refresh').click(function(){
+        //     $('#startDate').val('');
+        //     $('#endDate').val('');
+        //     $('#dataTable1').DataTable().destroy();
+        //     load_data();
+
+        // });
+    });
 </script>
 @endsection
 
@@ -133,7 +169,7 @@
             <form action="{{route('transaction.aa')}}" method="post">
                 @csrf
                 @method_value('POST')
-            <div class="row">
+            <div class="row input-daterange">
                 <div class="col-md-3 mb-3">
                     <label for="startDate">Start Date</label>
                     <input type="date" name="startDate" id="startDate" class="form-control">
@@ -159,7 +195,7 @@
                     </select>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <button class="btn btn-primary" type="submit" value="submit">Primary</button>
+                    <button class="btn btn-primary" id="search-form" type="submit" value="submit">Primary</button>
                 </div>
             </div>
             </form>

@@ -14,9 +14,10 @@ class SalesController extends Controller
 {
     public function index()
     {
+        $query=Product::where('status_active',1)->select('*')->get();
+        // $query=Product::query();
+        // dd($query);
         if(request()->ajax()){
-            $query=Product::where('status_active',1)->select('*')->get();
-            // $query=Product::query();
                 return Datatables::of($query)
                 ->addColumn('action', function($item){
                     return '
@@ -69,7 +70,7 @@ class SalesController extends Controller
                     'created_at'=>now(),
                     'updated_at'=>now(),
                 ];
-
+                
                 $idTrx=Transaction::insertGetId($payloadTrx);
                 $payloadTrxDetail=[];
                 for($i=0;$i<count($cart);$i++){
@@ -85,15 +86,17 @@ class SalesController extends Controller
                         // $a=array_push($a,$payloadTrxDetail);
                         TrxDetail::insert($payloadTrxDetail);
                     }
-                $this->reset();
+                    // $dataPrint=
+                    $this->reset();
                 }
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back()->with('fail','something went wrong');
-            // something went wrong
-        }
-        return redirect()->route('sales.index');
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollback();
+                return back()->with('fail','something went wrong');
+                // something went wrong
+            }
+            return $this->print($idTrx);
+        // return redirect()->route('sales.index');
     }
 
     public function addCart(SalesRequest $request)
@@ -145,5 +148,11 @@ class SalesController extends Controller
         ->orderBy('carts.qty','desc')
         ->get();
         return $cart;
+    }
+    public function print($req){
+       $data=Transaction::join('trx_details','transactions.id','=','trx_details.transaction_id')
+       ->where('transactions.id',$req)
+       ->select('')
+    return view('dashboard.sales.print',compact('a','b'));
     }
 }

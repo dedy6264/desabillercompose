@@ -77,84 +77,53 @@
 @section('pageheading')
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">Transaction</h1>
-    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+    {{-- <form action="{{route('transaction.export')}}" method="post">
+        <input type="datetime" name="startDate" id="startDate" value={{ $main[0]['created_at'] }}hidden>
+        <input type="datetime" name="endDate" id="endDate" value={{ $main[count($main)-1]['created_at'] }}hidden>
+        <input type="text" name="sales" id="sales" value={{  }}hidden>
+        <input type="text" name="status" id="status" value={{  }}hidden>
+        <button type="submit" value="submit" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            class="fas fa-download fa-sm text-white-50"></i> Generate Report</button>
+    </form> --}}
+    <a href="{{route('transaction.export')}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
             class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
 </div>
-@endsection
-
-@section('script')
-<script>
-    var datatable=$('#dataTable').DataTable( {
-        ajax:{
-            url:'{!!url()->current()!!}',
-        },
-        columnDefs: [{
-                            targets: [6],
-                            render: $.fn.dataTable.render.number( '.', ',', 2)
-                        }],
-        columns:[
-            {data: 'DT_RowIndex', orderable: false, searchable: false },
-            {data:'id', name:'id', render: function ( data, type, row, meta ) {
-                return '<a href="transaction/'+data+'" ><i class="fas fa-eye" title="Lihat detail"></i></a>';
-            }},
-            {data:'trx_no', name:'trx_no'},
-            {data:'payment_status', name:'payment_status',render: function ( data ) {
-                                var color;
-                                var desc;
-                                if (data == "00") {
-                                    color = "text-success";
-                                    desc = "SUCCESS";
-                                }else {
-                                    color = "text-danger";
-                                    desc = "PENDING";
-                                }
-                                return '<span class="'+ color +'">'+desc+'</span>';
-            }},
-            {data:'payment_method_name', name:'payment_method_name'},
-            {data:'payment_reff', name:'payment_reff'},
-            {data:'total_price', name:'total_price'},
-            {data:'payment_date', name:'payment_date'},
-            {data:'created_at', name:'created_at'},
-        ],
-    } );
-</script>
 @endsection
 
 @section('content')
 {{-- fiter --}}
     <div class="card shadow mb-4">
-        <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary ">Filter</h6></div>
+        <div class="card-header py-3"><h6 class="m-0 font-weight-bold text-primary ">Filter </h6></div>
         <div class="card-body">
-            <form action="{{route('transaction.aa')}}" method="post">
+            <form action="{{route('transaction.index')}}" method="post">
                 @csrf
-                @method_value('POST')
             <div class="row">
                 <div class="col-md-3 mb-3">
                     <label for="startDate">Start Date</label>
-                    <input type="date" name="startDate" id="startDate" class="form-control">
+                    <input type="date" name="startDate" value="{{date_format($main[0]['created_at'],"Y-m-d")}}" id="startDate" class="form-control">
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="endDate">End Date</label>
-                    <input type="date" name="endDate" id="endDate" class="form-control">
+                    <input type="date" name="endDate" value="{{date_format($main[count($main)-1]['created_at'],"Y-m-d")}}" id="endDate" class="form-control">
                 </div>
                 <div class="col-md-3 mb-3">
-                    <label for="status">Status</label>
+                    <label for="status">Status Payment</label>
                     <select name="status" id="status" class="form-control">
                         <option value="">All</option>
-                        <option value="">Pending</option>
-                        <option value="">Success</option>
+                        <option value="33">Pending</option>
+                        <option value="00">Success</option>
                     </select>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label for="sales">Sales</label>
                     <select name="sales" id="sales" class="form-control">
-                        <option value="">All</option>
-                        <option value="">Andi</option>
-                        <option value="">Dito</option>
+                        @foreach ($user as $u )
+                        <option value="{{$u['id']}}">{{$u['name']}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-12 mb-3">
-                    <button class="btn btn-primary" type="submit" value="submit">Primary</button>
+                    <button class="btn btn-primary" type="submit" value="submit">Filter</button>
                 </div>
             </div>
             </form>
@@ -163,7 +132,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary ">List Transactions</h6>
+            <h6 class="m-0 font-weight-bold text-primary ">List Transactions {{date_format($main[0]['created_at'],"Y-m-d")}} - {{date_format($main[count($main)-1]['created_at'],"Y-m-d")}}</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -182,6 +151,23 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $no=1;
+                        @endphp
+                        @foreach ($main as $data)
+                            
+                        <tr>
+                            <td>{{$no++}}</td>
+                            <td><a href="{{ url('transaction/'.$data->id)}}" ><i class="fas fa-eye" title="Lihat detail"></i></a></td>
+                            <td>{{$data->trx_no}}</td>
+                            <td><span class="{{$data->payment_status='00' ? 'text-success':'text-danger'}}">{{$data->payment_status='00' ? 'success':'pending'}}</span></td>
+                            <td>{{$data->payment_method_name}}</td>
+                            <td>{{$data->payment_reff}}</td>
+                            <td>{{$data->total_price}}</td>
+                            <td>{{$data->payment_date}}</td>
+                            <td>{{$data->created_at}}</td>
+                        </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

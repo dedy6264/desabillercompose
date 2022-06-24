@@ -38,10 +38,13 @@ Route::group(['middleware'=>['AuthCheck']], function(){
     Route::resource('user',UserController::class);
     Route::resource('product',ProductController::class);
     Route::resource('transaction',TransactionController::class);
-    Route::post('/transaction/filter', [TransactionController::class,'filter'])->name('transaction.aa');
+    Route::post('/transaction', [TransactionController::class,'index'])->name('transaction.index');
+    // Route::get('/transactionrr', [TransactionController::class, 'rr'])->name('rr');
+    Route::get('/export', [TransactionController::class,'export'])->name('transaction.export');
 
     Route::post('/sales/cart', [SalesController::class,'addCart'])->name('sales.addCart');
     Route::get('/sales/reset', [SalesController::class,'reset'])->name('sales.reset');
+    Route::get('/print', [SalesController::class,'print']);
     Route::resource('sales',SalesController::class);
 
 

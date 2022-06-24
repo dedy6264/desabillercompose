@@ -2,70 +2,75 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transaction;
+use App\Models\{Transaction,User};
 use Illuminate\Http\Request;
-// use Yajra\DataTables\Facades\DataTables;
 use App\Helpers\DateValidation;
 use Carbon\Carbon;
+use Rap2hpoutre\FastExcel\FastExcel;
+
+// use App\Services\PayUService\Exception;
 
 class TransactionController extends Controller
 {
     public function index(Request $request)
     {
         // dd($request->all());
+        $endDate=date('Y-m-d');
+        $speleng= mktime(0,0,0,date("n"),date("j")-31,date("Y"));
+        $startDate= date("Y-m-d", $speleng);
+       $user=User::select('id','name')
+       ->get()
+       ->prepend([
+        'id' => -1,
+        'name' => 'ALL'
+       ]);
 
-            $endDate=date('Y-m-d');
-            $speleng= mktime(0,0,0,date("n"),date("j")-31,date("Y"));
-            $startDate= date("Y-m-d", $speleng);
-            $request->merge([
-                'startDate'=>$startDate,
-                'endDate'=>$endDate,
-            ]);
-        
-            $main=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
-            ->whereBetween('transactions.created_at',[$request->startDate.' 00:00:00',$request->endDate.' 23:59:59'])
-            ->select('transactions.*','payments.payment_method_name')
-            ->get();
-        // $dataMain=$this->all($request);
-        if(request()->ajax()){
-            // dd(request()->ajax());
-            // $query=Transaction::query();
-                // return Datatables::of($query)
-                return datatables()->of($main)
-                ->addIndexColumn()
-                ->editColumn('created_at', function($itemm){
-                    return Carbon::createFromFormat('Y-m-d H:i:s', $itemm->created_at)->format('Y-m-d H:i:s');
+                \DB::enableQueryLog(); // Enable query log
+       $main=Transaction::join('users','transactions.created_by','=','users.name')
+       ->join('payments','transactions.payment_method_id','=','payments.id')     
+                // ->when($request->startDate!=true,function($query,$request){
+                //     return $query->whereBetween('transactions.created_at',[$request->startDate.' 00:00:00',$request->endDate.' 23:59:59']);
+                // })
+                ->when($request->sales!='-1',function($query)use($request){
+                   return $query->where('users.id',$request->sales);
                 })
-                ->make();
+                ->where(function($query) use ($request,$startDate,$endDate)  {
+                        if(!$request->startDate) {
+                        $query->whereBetween('transactions.created_at',[$startDate.' 00:00:00',$endDate.' 23:59:59']);
+                    }else{
+                        $query->whereBetween('transactions.created_at',[$request->startDate.' 00:00:00',$request->endDate.' 23:59:59']);
+                    }
+                 })
+                 ->when($request->status!='',function($query)use($request){
+                    return $query->where('transactions.payment_status',$request->status);
+                 })
+                ->select('transactions.*','payments.payment_method_name')
+                ->get();
+                                    dump(\DB::getQueryLog()); // Show results of log
+                                    dump($main);
+           
+            if(!$request->startDate){
+                $main=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
+                ->whereBetween('transactions.created_at',[$startDate.' 00:00:00',$endDate.' 23:59:59'])
+                ->select('transactions.*','payments.payment_method_name')
+                ->get();
+            }else{
+                $main=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
+                ->whereBetween('transactions.created_at',[$request->startDate.' 00:00:00',$request->endDate.' 23:59:59'])
+                ->select('transactions.*','payments.payment_method_name')
+                ->get();
             }
-        return view('dashboard.transaction.index');
-    }           
-    public function filter(Request $request)
-    {
-        // dd(request()->all());  
-        // $mainData=$this->all($request);
-       
-        // \DB::enableQueryLog(); // Enable query log
+            if(count($main)==0){
 
-    $mainData=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
-    ->whereBetween('transactions.created_at',[$request->startDate,$request->endDate])
-    ->select('transactions.*','payments.payment_method_name')
-    ->get();
-            // dd(\DB::getQueryLog()); // Show results of log
-        if(request()->ajax()){
+                return back();
+            }
             
-                return datatables()->of($mainData)
-                ->addIndexColumn()
-                ->editColumn('created_at', function($item){
-                    return Carbon::createFromFormat('Y-m-d H:i:s', $item->created_at)->format('Y-m-d H:i:s');
-                })
-                ->make();
-            }
-        return view('dashboard.transaction.filter');
-    }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+        
+        return view('dashboard.transaction.index',compact('main','user'));
+    }           
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
     public function show(Transaction $transaction)
     {
-        // dd($transaction->id);
         $header=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
             ->where('transactions.id',$transaction->id)
             ->select('transactions.*','payments.payment_method_name')
@@ -76,86 +81,41 @@ class TransactionController extends Controller
             ->where('transactions.id',$transaction->id)
             ->select('transactions.*','payments.payment_method_name','trx_details.qty','trx_details.product_price','products.product_name')
             ->get();
-            // dd($header,$detail);
         return view('dashboard.transaction.details',compact('detail','header'));
     }
-    public function all(Request $request){
-
-        // dd($request->all());
-        // if(!$request->start_date){
-        //     $start_date=Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d')." 00:00:01")->format('Y-m-d H:i:s');
-        //     $start_date=Carbon::createFromFormat('Y-m-d H:i:s', date('Y-m-d')." 00:00:01")->format('Y-m-d H:i:s');
-        // }
-        // $start_date=createFromFormat('Y-m-d H:i:s', $request->created_at)->format('Y-m-d H:i:s');
-
-                // \DB::enableQueryLog(); // Enable query log
-
+    public function export(Request $request){
+        // dd($reques÷t);
+        $endDate=date('Y-m-d');
+        $speleng= mktime(0,0,0,date("n"),date("j")-31,date("Y"));
+        $startDate= date("Y-m-d", $speleng);
         $main=Transaction::join('payments','transactions.payment_method_id','=','payments.id')
-        ->whereBetween('transactions.created_at',[$request->startDate.' 00:00:00',$request->endDate.' 23:59:59'])
-        ->select('transactions.*','payments.payment_method_name')
+        ->join('trx_details','transactions.id','=','trx_details.transaction_id')
+        ->join('products','products.id','=','trx_details.product_id')
+        // ->whereBetween('transactions.created_at',[$request->startDate.' 00:00:00',$request->endDate.' 23:59:59'])
+        ->whereBetween('transactions.created_at',[$startDate.' 00:00:00',$endDate.' 23:59:59'])
+        ->select('transactions.trx_no',
+        'transactions.payment_status',
+        'transactions.payment_date',
+        'transactions.payment_reff',
+        'trx_details.product_price',
+        'trx_details.qty',
+        'products.product_code',
+        'products.product_name',
+        'products.product_code',
+        'payments.payment_method_name')
         ->get();
-                    // dd(\DB::getQueryLog()); // Show results of log
-        return $main;
+        return (new FastExcel($main))->download('transaction.xlsx', function ($result) {
+            return [
+                'No Transaction'   => $result->trx_no,
+                'Payment Status'   => $result->payment_status,
+                'Payment Method'   => $result->payment_method_name,
+                'Payment Reff'     => $result->payment_reff,
+                'Payment Date'     => $result->payment_date,
+                'Product Name'     => $result->product_name,
+                'qty'              => $result->qty,
+                'Total Price'      => $result->qty*$result->product_price,
+            ];
+        });
     }
-    public function create()
-    {
-        
-    }
-
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Transaction  $transaction
-     * @return \Illuminate\Http\Response
-     */
-    // public function show(Transaction $transaction)
-    // {
-    //     //
-    // }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Transaction  $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Transaction $transaction)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Transaction  $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Transaction $transaction)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Transaction  $transaction
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Transaction $transaction)
-    {
-        //
-    }
+    
 }
