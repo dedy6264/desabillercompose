@@ -70,6 +70,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         try {
+            dd($product);
             $delete=$product->delete();
         } catch (\Throwable $th) {
             return back()->with('fail','gagal menghapus data');

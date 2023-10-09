@@ -8,6 +8,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\PostingController;
+use App\Http\Controllers\DashboardPromoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,19 +26,26 @@ use App\Http\Controllers\SalesController;
 // Route::get('/', function () {
 //     return view('login');
 // });
-Route::post('/daftar', [PendaftaranController::class, 'store'])->name('daftar.simpan');
-Route::post('/masuk', [MainController::class, 'masuk'])->name('masuk');
-Route::get('/logout', [MainController::class, 'logout'])->name('logout');
-
-
+// Route::get('/', function () { return redirect()->route('dashboard'); });
+Route::get('/in', function () { return redirect()->route('dashboard'); })->name('in');
+//internal dashboard
+Route::get('/loginDashboard', [MainController::class, 'index'])->name('loginDashboard'); //page login
+Route::post('/masuk', [MainController::class, 'masuk'])->name('masuk'); //prosses login
+Route::get('/daftar', [PendaftaranController::class, 'index'])->name('daftar'); //page register
+Route::post('/daftar', [PendaftaranController::class, 'store'])->name('daftar.simpan'); //proses register
+Route::get('/logout', [MainController::class, 'logout'])->name('logout'); //proses logout
+//public
+Route::get('/', [LandingController::class, "index"])->name('home'); //home apps & list posting
+Route::get('post', [LandingController::class, "addPost"])->name('posting'); //page create posting
+Route::post('posting', [PostingController::class, "store"])->name('posting.save'); //proses save postingan
+Route::post('posting/{id}', [PostingController::class, "show"])->name('posting.detail'); // page detail posting
+Route::post('changeActive/{id}',[DashboardPromoController::class,"store"])->name("dashboardPromo.changeActive");
 Route::group(['middleware'=>['AuthCheck']], function(){
-    Route::get('/', [MainController::class, 'index'])->name('index');
-    Route::get('/daftar', [PendaftaranController::class, 'index'])->name('daftar');
-    
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Route::get('/product', [ProductController::class, 'index'])->name('product');
     // Route::put('/product/{id}', [ProductController::class, 'destroy'])->name('product.delete');
     Route::resource('user',UserController::class);
+    Route::resource('dashboardPromo',DashboardPromoController::class);
     Route::resource('product',ProductController::class);
     Route::resource('transaction',TransactionController::class);
     Route::post('/transaction', [TransactionController::class,'index'])->name('transaction.index');

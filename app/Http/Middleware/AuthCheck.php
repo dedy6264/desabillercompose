@@ -16,12 +16,14 @@ class AuthCheck
      */
     public function handle(Request $request, Closure $next)
     {
-        // dd($request->path());
+        // dump($request->path()=='/' || $request->path()=='daftar');
+        // dd(session()->has('LoggedUser'));
         if(!session()->has('LoggedUser') && ($request->path() != '/' && $request->path() != 'daftar')){
-            return back()->with('fail', 'you must be logged in');
+            return redirect()->route('loginDashboard');
         }
         if(session()->has('LoggedUser')&&($request->path()=='/' || $request->path()=='daftar')){
-            return back();
+            // if(session()->has('LoggedUser')){
+            return redirect()->route('home');
         }
         return $next($request);
     }

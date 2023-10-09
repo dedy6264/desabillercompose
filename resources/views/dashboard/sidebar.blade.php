@@ -85,6 +85,22 @@
             </div>
         </div>
     </li>
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item {{in_Array($activeMenu,['promosmg','loker']) ? 'active':''}}">
+        {{-- collapsed --}}
+        <a class="nav-link {{in_Array($activeMenu,['promosmg','loker']) ? '':'collapsed'}}" href="#" data-toggle="collapse" data-target="#collapsePromo"
+            aria-expanded="{{in_Array($activeMenu,['promosmg','loker']) ? 'true':''}}" aria-controls="collapsePromo">
+            <i class="fas fa-fw fa-cog"></i>
+            <span>PROMOSMG</span>
+        </a>
+        <div id="collapsePromo" class="collapse {{in_Array($activeMenu,['promosmg','loker']) ? 'show':''}}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Custom Components:</h6>
+                <a class="collapse-item {{in_Array($activeMenu,['promosmg']) ? 'active':''}}" href="{{route('dashboardPromo.index')}}">PromoSMG</a>
+                <a class="collapse-item {{in_Array($activeMenu,['loker']) ? 'active':''}}" href="{{route('transaction.index')}}">Loker</a>
+            </div>
+        </div>
+    </li>
 <!-- Divider -->
 <hr class="sidebar-divider">
 

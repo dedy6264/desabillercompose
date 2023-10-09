@@ -21,6 +21,7 @@ class MainController extends Controller
 
     public function masuk(MainRequest $request)
     {
+        // dd($request->all)
         // dd(Session());
         $user=User::where('username',$request->username)
             ->where('password',md5($request->password))
@@ -39,7 +40,7 @@ class MainController extends Controller
         if(session()->has('LoggedUser')){
             session()->pull('LoggedUser');
         }
-        return redirect()->route('index');
+        return redirect()->route('home');
     }
 
    

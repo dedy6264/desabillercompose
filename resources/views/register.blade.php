@@ -28,7 +28,7 @@
 		      	</div>
 				 @if (Session::get('success'))
 					 {{Session::get('success')}}
-					 <a href="{{route('index')}}">login</a>
+					 <a href="{{route('home')}}">login</a>
 				 @else
 				 {{Session::get('fail')}}
 				 @endif

@@ -64,7 +64,6 @@ class TransactionController extends Controller
 
                 return back();
             }
-            
         
         return view('dashboard.transaction.index',compact('main','user'));
     }           
