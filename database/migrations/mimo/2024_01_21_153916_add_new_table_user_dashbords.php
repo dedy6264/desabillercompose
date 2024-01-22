@@ -13,8 +13,8 @@ class AddNewTableUserDashbords extends Migration
          Schema::create('role_segment_dashboards', function (Blueprint $table) {
             $table->id();
             $table->string('role_segment_name', 128)->unique();
-            $table->string('role_segment_code', 128)->unique();
-            $table->string('role', 128);
+            $table->string('role_segment_code', 128);
+            $table->string('role', 255)->nullable();
         });
         Schema::create('user_dashboard', function (Blueprint $table) {
             $table->id();
@@ -22,8 +22,8 @@ class AddNewTableUserDashbords extends Migration
             $table->string('password', 128);
             $table->string('email', 128)->unique();
             $table->unsignedInteger('role_segment_id');
-            $table->string('hierarchy_type', 128);
-            $table->unsignedInteger('hiearchy_id');
+            $table->string('hierarchy_type', 128)->nullable();
+            $table->unsignedInteger('hiearchy_id')->nullable();
             $table->foreign('role_segment_id')->references('id')->on('role_segment_dashboards');
         });
        
