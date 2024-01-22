@@ -10,6 +10,12 @@ class AddNewTableUserDashbords extends Migration
 
     public function up()
     {
+         Schema::create('role_segment_dashboards', function (Blueprint $table) {
+            $table->id();
+            $table->string('role_segment_name', 128)->unique();
+            $table->string('role_segment_code', 128)->unique();
+            $table->string('role', 128);
+        });
         Schema::create('user_dashboard', function (Blueprint $table) {
             $table->id();
             $table->string('username', 128)->unique();
@@ -18,12 +24,9 @@ class AddNewTableUserDashbords extends Migration
             $table->unsignedInteger('role_segment_id');
             $table->string('hierarchy_type', 128);
             $table->unsignedInteger('hiearchy_id');
+            $table->foreign('role_segment_id')->references('id')->on('role_segment_dashboards');
         });
-        Schema::create('role_segment_dashboards', function (Blueprint $table) {
-            $table->id();
-            $table->string('role_segment_name', 128)->unique();
-            $table->string('role', 128);
-        });
+       
     }
 
     public function down()
