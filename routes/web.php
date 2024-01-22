@@ -11,6 +11,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\PostingController;
 use App\Http\Controllers\DashboardPromoController;
+use App\Http\Controllers\Mimo\ClientController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,12 +52,13 @@ Route::group(['middleware'=>['AuthCheck']], function(){
     Route::post('/transaction', [TransactionController::class,'index'])->name('transaction.index');
     // Route::get('/transactionrr', [TransactionController::class, 'rr'])->name('rr');
     Route::get('/export', [TransactionController::class,'export'])->name('transaction.export');
-
+    
     Route::post('/sales/cart', [SalesController::class,'addCart'])->name('sales.addCart');
     Route::get('/sales/reset', [SalesController::class,'reset'])->name('sales.reset');
     Route::get('/print', [SalesController::class,'print']);
     Route::resource('sales',SalesController::class);
-
+    
+    Route::resource('client',ClientController::class);
 
 });
 
