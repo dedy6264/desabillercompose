@@ -18,7 +18,7 @@ class AddNewTableUserDashbords extends Migration
         });
         Schema::create('user_dashboard', function (Blueprint $table) {
             $table->id();
-            $table->string('username', 128)->unique();
+            $table->string('name', 128);
             $table->string('password', 128);
             $table->string('email', 128)->unique();
             $table->unsignedInteger('role_segment_id');
